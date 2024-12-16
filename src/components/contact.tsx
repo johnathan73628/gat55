@@ -6,38 +6,49 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mail, MessageSquare, Phone } from "lucide-react";
 
+interface FormData {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}
+
+interface FormErrors {
+  name?: string;
+  email?: string;
+  subject?: string;
+  message?: string;
+}
+
 export function Contact() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
     subject: "",
     message: "",
   });
 
-  const [status, setStatus] = useState("");
-  const [errors, setErrors] = useState({});
+  const [status, setStatus] = useState<string>("");
+  const [errors, setErrors] = useState<FormErrors>({});
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: "" })); // Clear specific field error on input
   };
 
-  const validateForm = async () => {
-    const newErrors = {};
+  const validateForm = async (): Promise<boolean> => {
+    const newErrors: FormErrors = {};
+
     if (!formData.name.trim()) newErrors.name = "Name is required.";
     if (!formData.email.trim()) {
       newErrors.email = "Email is required.";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Invalid email format.";
     } else {
-      // Validate email format
-      if (!/\S+@\S+\.\S+/.test(formData.email)) {
-        newErrors.email = "Invalid email format.";
-      } else {
-        // Check email validity using ZeroBounce
-        const isValidEmail = await validateEmailWithZeroBounce(formData.email);
-        if (!isValidEmail) {
-          newErrors.email = "Email is not valid.";
-        }
+      const isValidEmail = await validateEmailWithZeroBounce(formData.email);
+      if (!isValidEmail) {
+        newErrors.email = "Email is not valid.";
       }
     }
     if (!formData.subject.trim()) newErrors.subject = "Subject is required.";
@@ -47,7 +58,7 @@ export function Contact() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const validateEmailWithZeroBounce = async (email) => {
+  const validateEmailWithZeroBounce = async (email: string): Promise<boolean> => {
     try {
       const response = await fetch(
         `https://api.zerobounce.net/v2/validate?api_key=b275f891befc473f9e9eb4b4bd4dacbf&email=${email}`
@@ -60,7 +71,7 @@ export function Contact() {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!(await validateForm())) {
@@ -68,16 +79,17 @@ export function Contact() {
       return;
     }
 
+    const emailData: Record<string, unknown> = { ...formData };
+
     emailjs
       .send(
         "service_yfmf9mu", // Replace with your EmailJS Service ID
         "template_ng3uju3", // Replace with your EmailJS Template ID
-        formData,
+        emailData,
         "kV83nnR8uBNkpZwc6" // Replace with your EmailJS Public Key
       )
       .then(
-        (response) => {
-          console.log("Email sent successfully!", response);
+        () => {
           setStatus("Message sent successfully!");
           setFormData({ name: "", email: "", subject: "", message: "" }); // Clear form
         },
@@ -136,9 +148,7 @@ export function Contact() {
                     onChange={handleInputChange}
                     placeholder="Your name"
                   />
-                  {errors.name && (
-                    <p className="text-red-500 text-sm mt-1">{errors.name}</p>
-                  )}
+                  {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
                 </div>
                 <div>
                   <label className="block mb-2">Email</label>
@@ -149,9 +159,7 @@ export function Contact() {
                     onChange={handleInputChange}
                     placeholder="your@email.com"
                   />
-                  {errors.email && (
-                    <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-                  )}
+                  {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
                 </div>
               </div>
               <div>
@@ -162,9 +170,7 @@ export function Contact() {
                   onChange={handleInputChange}
                   placeholder="Message subject"
                 />
-                {errors.subject && (
-                  <p className="text-red-500 text-sm mt-1">{errors.subject}</p>
-                )}
+                {errors.subject && <p className="text-red-500 text-sm mt-1">{errors.subject}</p>}
               </div>
               <div>
                 <label className="block mb-2">Message</label>
@@ -175,9 +181,7 @@ export function Contact() {
                   placeholder="Your message"
                   className="min-h-[150px]"
                 />
-                {errors.message && (
-                  <p className="text-red-500 text-sm mt-1">{errors.message}</p>
-                )}
+                {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message}</p>}
               </div>
               <Button type="submit" className="w-full md:w-auto">
                 Send Message
