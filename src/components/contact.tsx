@@ -105,7 +105,8 @@ export function Contact() {
       <div className="container mx-auto max-w-5xl">
         <h2 className="text-3xl font-bold text-center mb-12">Get in Touch</h2>
         <div className="grid md:grid-cols-3 gap-8">
-          <Card>
+          {/* Contact Information Cards with Hover Effect */}
+          <Card className="group transform transition-transform duration-300 hover:scale-105 hover:shadow-lg">
             <CardHeader>
               <CardTitle className="flex items-center">
                 <Mail className="mr-2 h-5 w-5" /> Email
@@ -115,7 +116,7 @@ export function Contact() {
               <p className="text-muted-foreground">ganthony7554@gmail.com</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="group transform transition-transform duration-300 hover:scale-105 hover:shadow-lg">
             <CardHeader>
               <CardTitle className="flex items-center">
                 <Phone className="mr-2 h-5 w-5" /> Phone
@@ -125,7 +126,7 @@ export function Contact() {
               <p className="text-muted-foreground">+2348132826572</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="group transform transition-transform duration-300 hover:scale-105 hover:shadow-lg">
             <CardHeader>
               <CardTitle className="flex items-center">
                 <MessageSquare className="mr-2 h-5 w-5" /> Facebook
@@ -136,6 +137,7 @@ export function Contact() {
             </CardContent>
           </Card>
         </div>
+        {/* Contact Form */}
         <Card className="mt-12">
           <CardContent className="p-6">
             <form className="space-y-6" onSubmit={handleSubmit}>
