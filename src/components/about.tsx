@@ -4,7 +4,21 @@ import { motion } from 'framer-motion';
 
 const cardVariants = {
   hidden: { opacity: 0, y: 50 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeInOut' } },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: 'easeInOut' },
+  },
+  hover: {
+    rotateY: 15,
+    rotateX: -10,
+    scale: 1.05,
+    transition: {
+      duration: 0.6,
+      type: 'spring',
+      stiffness: 150,
+    },
+  },
 };
 
 export function About() {
@@ -51,7 +65,8 @@ export function About() {
             <motion.div
               key={index}
               variants={cardVariants}
-              className="group"
+              whileHover="hover"
+              className="group perspective-1000"
             >
               <Card
                 className="overflow-hidden relative transform transition-all duration-300 hover:-translate-y-2 hover:shadow-lg"

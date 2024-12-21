@@ -1,53 +1,62 @@
-import { useInView } from 'react-intersection-observer';
+import { motion } from 'framer-motion';
 import { Progress } from '@/components/ui/progress';
 
-export function Skills() {
-  const { ref, inView } = useInView({
-    threshold: 0.1, // Trigger animations when 10% of the element is visible
-    triggerOnce: true, // Run the animation only once
-  });
+const skills = [
+  { name: 'React', level: 90 },
+  { name: 'TypeScript', level: 85 },
+  { name: 'Node.js', level: 80 },
+  { name: 'CSS/Tailwind', level: 85 },
+  { name: 'Database Design', level: 75 },
+  { name: 'DevOps', level: 70 },
+];
 
-  const skills = [
-    { name: 'React', level: 90 },
-    { name: 'TypeScript', level: 85 },
-    { name: 'Node.js', level: 80 },
-    { name: 'CSS/Tailwind', level: 85 },
-    { name: 'Database Design', level: 75 },
-    { name: 'DevOps', level: 70 },
-  ];
+export function Skills() {
+  const handleMouseMove = (e) => {
+    const { currentTarget, clientX, clientY } = e;
+    const { left, top, width, height } = currentTarget.getBoundingClientRect();
+
+    const x = ((clientX - left) / width) * 2 - 1; // Normalize [-1, 1]
+    const y = ((clientY - top) / height) * 2 - 1; // Normalize [-1, 1]
+
+    currentTarget.style.transform = `rotateX(${y * -15}deg) rotateY(${x * 15}deg)`;
+  };
+
+  const resetTransform = (e) => {
+    e.currentTarget.style.transform = 'rotateX(0deg) rotateY(0deg)';
+  };
 
   return (
-    <section id="skills" className="py-20 px-4 bg-muted/50">
-      <div className="container mx-auto max-w-3xl">
-        <h2 className="text-3xl font-bold text-center mb-12">Skills</h2>
-        <div ref={ref} className="space-y-6">
+    <section id="skills" className="py-20 px-4 bg-muted/50 dark:bg-muted/80">
+      <div className="container mx-auto max-w-4xl">
+        <h2 className="text-3xl font-bold text-center mb-12 text-foreground dark:text-primary">
+          My Skills
+        </h2>
+        <div className="grid md:grid-cols-3 gap-8">
           {skills.map((skill, index) => (
-            <div
+            <motion.div
               key={index}
-              className={`group transform transition-all duration-700 opacity-0 translate-y-4 ${
-                inView ? 'opacity-100 translate-y-0' : ''
-              }`}
-              style={{
-                transitionDelay: `${index * 100}ms`, // Staggered animation
-              }}
+              className="group p-4 bg-white dark:bg-black shadow-lg rounded-lg perspective-1000 transition-colors duration-300"
+              onMouseMove={handleMouseMove}
+              onMouseLeave={resetTransform}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <div className="flex justify-between mb-2">
-                <span className="font-medium group-hover:text-blue-500 transition-colors duration-300">
-                  {skill.name}
-                </span>
-                <span className="text-muted-foreground group-hover:text-blue-500 transition-colors duration-300">
-                  {skill.level}%
-                </span>
-              </div>
+              <h3 className="text-xl font-semibold mb-2 text-center text-foreground dark:text-primary">
+                {skill.name}
+              </h3>
               <Progress
-                value={inView ? skill.level : 0} // Grow the bar when visible
-                className={`h-2 transition-all duration-1000 group-hover:scale-105 group-hover:bg-blue-500`}
+                value={skill.level}
+                className="h-2 bg-muted-foreground dark:bg-muted/60 mb-4"
               />
-            </div>
+              <p className="text-muted-foreground dark:text-gray-400 text-center">
+                Proficiency: {skill.level}%
+              </p>
+            </motion.div>
           ))}
         </div>
       </div>
     </section>
   );
 }
-

@@ -10,23 +10,6 @@ body {
   @apply bg-black text-foreground;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  @apply bg-[#1A1A1A];
-}
-
-::-webkit-scrollbar-thumb {
-  @apply bg-purple-600 rounded-full;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-purple-700;
-}
-
 /* Root styles */
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
