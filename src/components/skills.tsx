@@ -1,62 +1,77 @@
+'use client'
+
 import { motion } from 'framer-motion';
 import { Progress } from '@/components/ui/progress';
+import { useState } from 'react';
+import { Tooltip, TooltipProvider } from '@/components/ui/tooltip';
 
 const skills = [
-  { name: 'React', level: 90 },
-  { name: 'TypeScript', level: 85 },
-  { name: 'Node.js', level: 80 },
-  { name: 'CSS/Tailwind', level: 85 },
-  { name: 'Database Design', level: 75 },
-  { name: 'DevOps', level: 70 },
+  { name: 'React', level: 90, description: 'Building efficient and interactive user interfaces' },
+  { name: 'TypeScript', level: 85, description: 'Developing type-safe and scalable applications' },
+  { name: 'Node.js', level: 80, description: 'Creating robust backend services and APIs' },
+  { name: 'CSS/Tailwind', level: 85, description: 'Crafting responsive and beautiful designs' },
+  { name: 'Database Design', level: 75, description: 'Designing efficient and scalable data structures' },
+  { name: 'DevOps', level: 70, description: 'Implementing CI/CD pipelines and cloud infrastructure' },
 ];
 
+const getProgressColor = (level: number) => {
+  if (level > 80) return 'bg-primary';
+  if (level > 60) return 'bg-secondary';
+  return 'bg-destructive';
+};
+
 export function Skills() {
-  const handleMouseMove = (e) => {
-    const { currentTarget, clientX, clientY } = e;
-    const { left, top, width, height } = currentTarget.getBoundingClientRect();
-
-    const x = ((clientX - left) / width) * 2 - 1; // Normalize [-1, 1]
-    const y = ((clientY - top) / height) * 2 - 1; // Normalize [-1, 1]
-
-    currentTarget.style.transform = `rotateX(${y * -15}deg) rotateY(${x * 15}deg)`;
-  };
-
-  const resetTransform = (e) => {
-    e.currentTarget.style.transform = 'rotateX(0deg) rotateY(0deg)';
-  };
+  const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
 
   return (
-    <section id="skills" className="py-20 px-4 bg-muted/50 dark:bg-muted/80">
-      <div className="container mx-auto max-w-4xl">
-        <h2 className="text-3xl font-bold text-center mb-12 text-foreground dark:text-primary">
-          My Skills
-        </h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          {skills.map((skill, index) => (
-            <motion.div
-              key={index}
-              className="group p-4 bg-white dark:bg-black shadow-lg rounded-lg perspective-1000 transition-colors duration-300"
-              onMouseMove={handleMouseMove}
-              onMouseLeave={resetTransform}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              <h3 className="text-xl font-semibold mb-2 text-center text-foreground dark:text-primary">
-                {skill.name}
-              </h3>
-              <Progress
-                value={skill.level}
-                className="h-2 bg-muted-foreground dark:bg-muted/60 mb-4"
-              />
-              <p className="text-muted-foreground dark:text-gray-400 text-center">
-                Proficiency: {skill.level}%
-              </p>
-            </motion.div>
-          ))}
+    <TooltipProvider>
+      <section id="skills" className="py-20 px-4 bg-background">
+        <div className="container mx-auto max-w-4xl">
+          <motion.h2 
+            className="text-4xl font-bold text-center mb-12 text-foreground"
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            My Skills
+          </motion.h2>
+          <div className="grid sm:grid-cols-2 gap-8">
+            {skills.map((skill, index) => (
+              <Tooltip key={index} content={skill.description}>
+                <motion.div
+                  className="group p-6 bg-card shadow-lg rounded-lg transition-all duration-300 hover:shadow-xl"
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  onMouseEnter={() => setHoveredSkill(skill.name)}
+                  onMouseLeave={() => setHoveredSkill(null)}
+                >
+                  <h3 className="text-2xl font-semibold mb-4 text-foreground">
+                    {skill.name}
+                  </h3>
+                  <div className="relative">
+                    <Progress
+                      value={skill.level}
+                      className={`h-3 mb-2 ${getProgressColor(skill.level)}`}
+                    />
+                    <motion.div
+                      className="absolute top-0 left-0 h-full bg-primary/20 rounded-full"
+                      initial={{ width: '0%' }}
+                      animate={{ width: hoveredSkill === skill.name ? `${skill.level}%` : '0%' }}
+                      transition={{ duration: 0.5 }}
+                    />
+                  </div>
+                  <p className="text-muted-foreground text-sm font-medium">
+                    Proficiency: {skill.level}%
+                  </p>
+                </motion.div>
+              </Tooltip>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </TooltipProvider>
   );
 }
+
