@@ -45,11 +45,12 @@ export function Header() {
             variant="ghost"
             size="icon"
             onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+            className="transition-all duration-300 p-2 rounded-full bg-transparent border-2 border-primary hover:bg-primary/10 focus:ring-4 focus:ring-primary/20 hover:scale-110 shadow-lg transform hover:rotate-45"
           >
             {theme === 'light' ? (
-              <Moon className="h-5 w-5" />
+              <Moon className="h-5 w-5 text-primary transition-all duration-300" />
             ) : (
-              <Sun className="h-5 w-5" />
+              <Sun className="h-5 w-5 text-primary transition-all duration-300" />
             )}
           </Button>
         </div>

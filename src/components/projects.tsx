@@ -15,7 +15,7 @@ export function Projects() {
       title: 'Website to Teach Coding',
       description:
         'A platform to teach coding concepts and programming languages interactively.',
-      image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c',
+      image: '/gat55/assets/1.jpg',
       tags: ['HTML', 'CSS', 'JS'],
       github: '#',
       demo: '#',
@@ -24,7 +24,7 @@ export function Projects() {
       title: 'Weather Data Analysis',
       description:
         'Analyzed weather data to provide insights on patterns and forecasts.',
-      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f',
+      image: '/gat55/assets/2.jpg',
       tags: ['Python', 'Data Analysis', 'Pandas', 'Matplotlib'],
       github: '#',
       demo: '#',
@@ -33,7 +33,7 @@ export function Projects() {
       title: 'Mobile App for Analytics',
       description:
         'A mobile-first application that allows users to track and analyze various metrics.',
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71',
+      image: '/gat55/assets/3.jpg',
       tags: ['React Native', 'Firebase', 'Analytics'],
       github: '#',
       demo: '#',

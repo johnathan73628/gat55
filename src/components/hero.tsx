@@ -33,7 +33,6 @@ const socialButton = {
 const gradientBg = {
   animate: {
     scale: [1, 1.2, 1],
-    rotate: [0, 180, 360],
     transition: {
       duration: 15,
       repeat: Infinity,
@@ -111,32 +110,31 @@ export function Hero() {
             variants={item}
             className="mt-8 flex gap-6"
           >
-            {[
-              { icon: Github, href: "#" },
-              { icon: Linkedin, href: "#" },
-              { icon: Mail, href: "#" },
-            ].map((social, index) => (
-              <motion.a
-                key={index}
-                href={social.href}
-                variants={socialButton}
-                initial="rest"
-                whileHover="hover"
-                className="relative p-2 rounded-full bg-background/10 backdrop-blur-sm border border-border/50 transition-colors hover:border-primary/50"
-              >
-                <social.icon className="h-6 w-6 transition-colors hover:text-primary" />
-              </motion.a>
-            ))}
+            {[{ icon: Github, href: "#" }, { icon: Linkedin, href: "#" }, { icon: Mail, href: "#" }].map(
+              (social, index) => (
+                <motion.a
+                  key={index}
+                  href={social.href}
+                  variants={socialButton}
+                  initial="rest"
+                  whileHover="hover"
+                  className="relative p-2 rounded-full bg-background/10 backdrop-blur-sm border border-border/50 transition-colors hover:border-primary/50"
+                >
+                  <social.icon className="h-6 w-6 transition-colors hover:text-primary" />
+                </motion.a>
+              )
+            )}
           </motion.div>
         </div>
       </motion.div>
 
+      {/* Gradient Background without rotation */}
       <motion.div
         variants={gradientBg}
         animate="animate"
         className="absolute inset-x-0 -z-10 transform-gpu overflow-hidden blur-3xl"
       >
-        <div className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-primary to-purple-600 opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]" />
+        <div className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-primary to-purple-600 opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]" />
       </motion.div>
     </section>
   );
