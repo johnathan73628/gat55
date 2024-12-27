@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import {
   Card,
   CardContent,
@@ -8,8 +9,14 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ExternalLink, Github } from 'lucide-react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export function Projects() {
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+
   const projects = [
     {
       title: 'Website to Teach Coding',
@@ -25,7 +32,7 @@ export function Projects() {
       description:
         'Analyzed weather data to provide insights on patterns and forecasts.',
       image: '/gat55/assets/2.jpg',
-      tags: ['Python', 'Data Analysis', 'Pandas', 'Matplotlib'],
+      tags: ['Python', 'Data Analysis', 'Pandas', 'Folium'],
       github: '#',
       demo: '#',
     },
@@ -40,14 +47,38 @@ export function Projects() {
     },
   ];
 
+  useEffect(() => {
+    cardsRef.current.forEach((card, index) => {
+      if (card) {
+        gsap.fromTo(
+          card,
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1.2, // Increase duration for smoother animation
+            delay: index * 0.2,
+            ease: 'expo.out', // Use a gentler easing function
+            scrollTrigger: {
+              trigger: card,
+              start: 'top 85%',
+              scrub: 1, // Synchronizes animation with scroll
+            },
+          }
+        );
+      }
+    });
+  }, []);
+  
   return (
     <section id="projects" className="py-20 px-4">
       <div className="container mx-auto">
         <h2 className="text-3xl font-bold text-center mb-12">Featured Projects</h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projects.map((project, index) => (
-            <Card 
-              key={index} 
+            <Card
+              key={index}
+              ref={(el) => (cardsRef.current[index] = el)}
               className="overflow-hidden group relative transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
             >
               <div className="relative overflow-hidden">
@@ -79,15 +110,15 @@ export function Projects() {
                 </div>
               </CardContent>
               <CardFooter className="flex justify-between transition-colors duration-300 group-hover:bg-background/95">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   size="sm"
                   className="transition-all duration-300 hover:scale-105 hover:shadow-md"
                 >
                   <Github className="mr-2 h-4 w-4 transition-transform duration-300 group-hover:rotate-12" />
                   Code
                 </Button>
-                <Button 
+                <Button
                   size="sm"
                   className="transition-all duration-300 hover:scale-105 hover:shadow-md"
                 >
