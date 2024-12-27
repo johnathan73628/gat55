@@ -57,7 +57,7 @@ export function Projects() {
             opacity: 1,
             y: 0,
             duration: 1.2, // Increase duration for smoother animation
-            delay: index * 0.2,
+            delay: index * 0.1,
             ease: 'expo.out', // Use a gentler easing function
             scrollTrigger: {
               trigger: card,
@@ -70,6 +70,7 @@ export function Projects() {
     });
   }, []);
   
+
   return (
     <section id="projects" className="py-20 px-4">
       <div className="container mx-auto">
